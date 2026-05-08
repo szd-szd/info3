@@ -9,7 +9,7 @@
 # Voir aussi : scripts/release-version.sh (bump ciblé + lockfile npm, idéal pour v1.0.0).
 #
 # Le second forme met à jour VERSION + frontend/package.json (+ package-lock), commit, tag,
-# puis pousse la branche courante et les tags (--follow-tags).
+# puis pousse la branche puis le tag vX.Y.Z explicitement (visible sous github.com/…/tags).
 # =============================================================================
 
 set -euo pipefail
@@ -80,6 +80,11 @@ echo ">>> git add -A"
 git add -A
 
 if git diff --staged --quiet; then
+  if [[ -n "$RELEASE" ]]; then
+    echo "Erreur : aucun fichier version modifié (déjà en $RELEASE ?)." >&2
+    echo "Pour poser seulement le tag sur le commit actuel : ./scripts/release-version.sh $RELEASE --tag-only" >&2
+    exit 1
+  fi
   echo "Rien à committer (index vide)."
   exit 0
 fi
@@ -90,9 +95,10 @@ git status -sb
 echo ">>> git commit -m \"$MSG\""
 git commit -m "$MSG"
 
+TAG=""
 if [[ -n "$RELEASE" ]]; then
   TAG="v$RELEASE"
-  if git rev-parse "$TAG" >/dev/null 2>&1; then
+  if git show-ref --verify --quiet "refs/tags/$TAG"; then
     echo "Erreur : le tag $TAG existe déjà." >&2
     exit 1
   fi
@@ -100,7 +106,15 @@ if [[ -n "$RELEASE" ]]; then
   git tag -a "$TAG" -m "Release $TAG"
 fi
 
-echo ">>> git push -u origin $BRANCH --follow-tags"
-git push -u origin "$BRANCH" --follow-tags
+echo ">>> git push -u origin $BRANCH"
+git push -u origin "$BRANCH"
+if [[ -n "$TAG" ]]; then
+  echo ">>> git push origin $TAG   (tag explicite — visible sur GitHub dans « Tags »)"
+  git push origin "$TAG"
+fi
 
 echo "Terminé (branche : $BRANCH)."
+if [[ -n "$TAG" ]]; then
+  echo "Tag local : $TAG  ($(git rev-parse "$TAG" 2>/dev/null | cut -c1-7)…)"
+  echo "Lister les tags : git tag -l 'v*' | tail -n 20"
+fi

@@ -100,7 +100,7 @@ TAG="v$VERSION"
 DEFAULT_MSG="chore: release $TAG"
 MSG="${COMMIT_MSG:-$DEFAULT_MSG}"
 
-if git rev-parse "$TAG" >/dev/null 2>&1; then
+if git show-ref --verify --quiet "refs/tags/$TAG"; then
   echo "Erreur : le tag $TAG existe déjà en local." >&2
   exit 1
 fi
@@ -128,14 +128,20 @@ else
 fi
 
 if [[ "$NO_PUSH" == true ]]; then
-  echo ">>> --no-push : pas de git push. Pour publier le tag :"
-  echo "    git push origin \"$(git rev-parse --abbrev-ref HEAD)\" --follow-tags"
-  echo "    # ou : git push origin $TAG"
+  echo ">>> --no-push : pas de git push. Pour publier sur GitHub :"
+  echo "    git push -u origin \"$(git rev-parse --abbrev-ref HEAD)\""
+  echo "    git push origin $TAG"
+  echo ">>> Tags locaux (aperçu) :"
+  git tag -l 'v*' | tail -n 15 || true
   exit 0
 fi
 
 BRANCH="$(git rev-parse --abbrev-ref HEAD)"
-echo ">>> git push origin $BRANCH --follow-tags"
-git push -u origin "$BRANCH" --follow-tags
+echo ">>> git push -u origin $BRANCH"
+git push -u origin "$BRANCH"
+echo ">>> git push origin $TAG   (tag explicite — dépôt GitHub : onglet « Tags » du repo)"
+git push origin "$TAG"
 
-echo "Terminé : $TAG poussé vers origin (branche $BRANCH)."
+echo "Terminé : commit + $TAG poussés vers origin (branche $BRANCH)."
+echo ">>> Vérifier en local : git tag -l 'v*' | tail -n 20"
+echo ">>> Vérifier le remote : git fetch origin --tags && git tag -l 'v*' | tail -n 20"

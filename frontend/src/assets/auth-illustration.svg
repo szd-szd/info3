@@ -1,0 +1,26 @@
+<svg width="640" height="520" viewBox="0 0 640 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="70" y1="20" x2="560" y2="480" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7DA8FF"/>
+      <stop offset="1" stop-color="#2256A6"/>
+    </linearGradient>
+    <linearGradient id="card" x1="190" y1="120" x2="430" y2="380" gradientUnits="userSpaceOnUse">
+      <stop stop-color="white" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="white" stop-opacity="0.82"/>
+    </linearGradient>
+  </defs>
+  <rect x="22" y="22" width="596" height="476" rx="36" fill="url(#bg)"/>
+  <circle cx="520" cy="120" r="52" fill="white" fill-opacity="0.16"/>
+  <circle cx="132" cy="420" r="68" fill="white" fill-opacity="0.12"/>
+  <rect x="182" y="108" width="276" height="304" rx="24" fill="url(#card)"/>
+  <rect x="218" y="154" width="204" height="18" rx="9" fill="#D7E4FF"/>
+  <rect x="218" y="192" width="170" height="12" rx="6" fill="#D7E4FF"/>
+  <rect x="218" y="226" width="204" height="64" rx="12" fill="#EEF3FF"/>
+  <rect x="218" y="308" width="140" height="12" rx="6" fill="#D7E4FF"/>
+  <rect x="218" y="338" width="118" height="12" rx="6" fill="#D7E4FF"/>
+  <rect x="360" y="332" width="62" height="24" rx="12" fill="#2256A6"/>
+  <path d="M114 198C114 176.909 131.091 159.818 152.182 159.818H157.818C178.909 159.818 196 176.909 196 198V205H114V198Z" fill="white" fill-opacity="0.2"/>
+  <circle cx="155" cy="145" r="24" fill="white" fill-opacity="0.22"/>
+  <text x="78" y="84" fill="white" fill-opacity="0.95" font-family="DM Sans, Arial, sans-serif" font-size="28" font-weight="700">RH Portal</text>
+  <text x="78" y="114" fill="white" fill-opacity="0.88" font-family="DM Sans, Arial, sans-serif" font-size="15">Gestion des congés et profils collaborateurs</text>
+</svg>

@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { supabase } from '../lib/supabase';
 import { loginSchema } from '../lib/validation';
+import authIllustration from '../assets/auth-illustration.svg';
 
 type Form = { email: string; password: string };
 
@@ -34,9 +35,15 @@ export function LoginPage() {
   }
 
   return (
-    <div className="layout-main" style={{ maxWidth: 420 }}>
-      <div className="card">
+    <div className="auth-shell">
+      <section className="auth-hero card" aria-hidden="true">
+        <img src={authIllustration} alt="" />
+        <h2>Espace RH centralise</h2>
+        <p>Connectez-vous pour consulter vos congés, demandes et informations employé.</p>
+      </section>
+      <div className="card auth-card">
         <h1>Connexion</h1>
+        <p className="auth-subtitle">Accédez à votre espace collaborateur en toute sécurité.</p>
         {error && <div className="flash flash-error">{error}</div>}
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <div className="field">
@@ -54,11 +61,11 @@ export function LoginPage() {
             />
             {errors.password && <div className="error">{errors.password.message}</div>}
           </div>
-          <button type="submit" className="btn" disabled={isSubmitting}>
+          <button type="submit" className="btn auth-submit" disabled={isSubmitting}>
             {isSubmitting ? 'Connexion…' : 'Se connecter'}
           </button>
         </form>
-        <p style={{ marginTop: '1rem' }}>
+        <p className="auth-switch">
           Pas de compte ? <Link to="/register">Créer un compte</Link>
         </p>
       </div>

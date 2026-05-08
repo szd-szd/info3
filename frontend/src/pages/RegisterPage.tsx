@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { supabase } from '../lib/supabase';
 import { authEmailRedirectUrl } from '../lib/supabaseUrl';
 import { registerSchema } from '../lib/validation';
+import authIllustration from '../assets/auth-illustration.svg';
 
 type Form = { email: string; password: string };
 
@@ -44,10 +45,17 @@ export function RegisterPage() {
   }
 
   return (
-    <div className="layout-main" style={{ maxWidth: 420 }}>
-      <div className="card">
+    <div className="auth-shell">
+      <section className="auth-hero card" aria-hidden="true">
+        <img src={authIllustration} alt="" />
+        <h2>Commencez simplement</h2>
+        <p>Créez votre compte avec l'adresse RH pour lier automatiquement votre profil.</p>
+      </section>
+      <div className="card auth-card">
         <h1>Inscription</h1>
-        <p>Utilisez la même adresse e-mail que celle renseignée par les RH pour être relié automatiquement.</p>
+        <p className="auth-subtitle">
+          Utilisez la même adresse e-mail que celle renseignée par les RH.
+        </p>
         {error && <div className="flash flash-error">{error}</div>}
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <div className="field">
@@ -65,11 +73,11 @@ export function RegisterPage() {
             />
             {errors.password && <div className="error">{errors.password.message}</div>}
           </div>
-          <button type="submit" className="btn" disabled={isSubmitting}>
+          <button type="submit" className="btn auth-submit" disabled={isSubmitting}>
             {isSubmitting ? 'Inscription…' : 'Créer mon compte'}
           </button>
         </form>
-        <p style={{ marginTop: '1rem' }}>
+        <p className="auth-switch">
           Déjà inscrit ? <Link to="/login">Connexion</Link>
         </p>
       </div>
