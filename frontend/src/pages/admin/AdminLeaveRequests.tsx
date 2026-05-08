@@ -5,7 +5,7 @@ import { supabase } from '../../lib/supabase';
 import { leaveDecisionSchema } from '../../lib/validation';
 import type { LeaveRequest, LeaveStatus } from '../../lib/types';
 import { leaveStatusBadgeClass, leaveStatusLabel } from '../../lib/types';
-import { useAuth } from '../../auth/AuthProvider';
+import { useAuth } from '../../auth/useAuth';
 import type { z } from 'zod';
 
 type Row = LeaveRequest & {

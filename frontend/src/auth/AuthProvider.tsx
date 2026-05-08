@@ -1,7 +1,5 @@
 import {
-  createContext,
   useCallback,
-  useContext,
   useEffect,
   useMemo,
   useState,
@@ -10,16 +8,7 @@ import {
 import type { Session } from '@supabase/supabase-js';
 import { supabase } from '../lib/supabase';
 import type { Profile } from '../lib/types';
-
-type AuthCtx = {
-  session: Session | null;
-  profile: Profile | null;
-  loading: boolean;
-  refreshProfile: () => Promise<void>;
-  signOut: () => Promise<void>;
-};
-
-const Ctx = createContext<AuthCtx | null>(null);
+import { AuthContext, type AuthCtx } from './auth-context';
 
 async function fetchProfile(userId: string): Promise<Profile | null> {
   const { data, error } = await supabase
@@ -85,15 +74,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const value = useMemo(
-    () => ({ session, profile, loading, refreshProfile, signOut }),
+    (): AuthCtx => ({ session, profile, loading, refreshProfile, signOut }),
     [session, profile, loading, refreshProfile, signOut]
   );
 
-  return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
-}
-
-export function useAuth() {
-  const v = useContext(Ctx);
-  if (!v) throw new Error('useAuth hors AuthProvider');
-  return v;
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

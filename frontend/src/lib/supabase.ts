@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
-import { authEmailRedirectUrl, normalizeSupabaseProjectUrl } from './supabaseUrl';
+import { normalizeSupabaseProjectUrl } from './supabaseUrl';
 
 const url = normalizeSupabaseProjectUrl(import.meta.env.VITE_SUPABASE_URL);
 const anon = import.meta.env.VITE_SUPABASE_ANON_KEY?.trim().replace(/^["']|["']$/g, '') ?? '';
