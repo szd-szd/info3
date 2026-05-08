@@ -1,0 +1,28 @@
+# Dépendances
+node_modules/
+**/node_modules/
+
+# Build
+dist/
+**/dist/
+
+# Environnement (ne jamais committer de secrets)
+.env
+.env.*
+!.env.example
+frontend/.env
+frontend/.env.*
+secret
+
+# Outils / OS
+.DS_Store
+*.log
+.npm-install.log
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Fichiers locaux orphelins
+readm

@@ -1,0 +1,27 @@
+# Variante Linux : pas de publication de ports Docker (évite les bugs de proxy / pare-feu).
+# Vite écoute directement sur 0.0.0.0:5243 sur la machine hôte.
+#
+#   docker compose -f docker-compose.host-network.yml up
+#
+# Sur macOS/Windows (Docker Desktop), le mode host ne se comporte pas comme sur Linux ;
+# préférez le `docker-compose.yml` standard.
+
+services:
+  frontend:
+    image: node:22-bookworm-slim
+    container_name: rh-portal-frontend
+    working_dir: /app
+    network_mode: host
+    volumes:
+      - ./frontend:/app
+      - frontend_node_modules:/app/node_modules
+      - ./docker/entrypoint-dev.sh:/entrypoint-dev.sh:ro
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - DOCKER_HMR_CLIENT_PORT=5243
+      - VITE_DEV_PORT=5243
+    restart: unless-stopped
+    entrypoint: ["/bin/sh", "/entrypoint-dev.sh"]
+
+volumes:
+  frontend_node_modules:

@@ -1,0 +1,23 @@
+services:
+  frontend:
+    image: node:22-bookworm-slim
+    container_name: rh-portal-frontend
+    working_dir: /app
+    # Carte hôte → conteneur. 127.0.0.1 évite les soucis IPv6 (localhost → ::1).
+    ports:
+      - "127.0.0.1:${HOST_PORT:-5243}:5320"
+    volumes:
+      - ./frontend:/app
+      - frontend_node_modules:/app/node_modules
+      - ./docker/entrypoint-dev.sh:/entrypoint-dev.sh:ro
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      # HMR depuis le navigateur sur le port exposé (même valeur que HOST_PORT par défaut)
+      - DOCKER_HMR_CLIENT_PORT=${HOST_PORT:-5243}
+      - VITE_DEV_PORT=5320
+    restart: unless-stopped
+    # Variables Vite : fichier frontend/.env monté dans /app (ne pas commiter les secrets)
+    entrypoint: ["/bin/sh", "/entrypoint-dev.sh"]
+
+volumes:
+  frontend_node_modules:
