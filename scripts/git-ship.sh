@@ -4,9 +4,11 @@
 # =============================================================================
 # Usage :
 #   ./scripts/git-ship.sh "feat: description du changement"
-#   ./scripts/git-ship.sh "chore: release v0.2.0" --release 0.2.0
+#   ./scripts/git-ship.sh "chore: release v1.0.0" --release 1.0.0
 #
-# Le second forme met à jour VERSION + frontend/package.json, commit, tag v0.2.0,
+# Voir aussi : scripts/release-version.sh (bump ciblé + lockfile npm, idéal pour v1.0.0).
+#
+# Le second forme met à jour VERSION + frontend/package.json (+ package-lock), commit, tag,
 # puis pousse la branche courante et les tags (--follow-tags).
 # =============================================================================
 
@@ -33,7 +35,7 @@ while [[ $# -gt 0 ]]; do
       echo ""
       echo "Exemples :"
       echo "  $0 \"fix: correction login\""
-      echo "  $0 \"chore: release v0.2.0\" --release 0.2.0"
+      echo "  $0 \"chore: release v1.0.0\" --release 1.0.0"
       exit 0
       ;;
     *)
@@ -66,14 +68,12 @@ if [[ -n "$RELEASE" ]]; then
     exit 1
   fi
   echo "$RELEASE" > VERSION
-  if command -v sed >/dev/null; then
-    sed -i.bak "s/\"version\": \"[^\"]*\"/\"version\": \"$RELEASE\"/" frontend/package.json
-    rm -f frontend/package.json.bak
-  else
-    echo "Erreur : sed introuvable." >&2
+  if ! command -v npm >/dev/null 2>&1; then
+    echo "Erreur : npm introuvable (--release met à jour le lockfile via npm version)." >&2
     exit 1
   fi
-  echo "Version mise à jour : $RELEASE (VERSION + frontend/package.json)"
+  (cd "$REPO_ROOT/frontend" && npm version "$RELEASE" --no-git-tag-version)
+  echo "Version mise à jour : $RELEASE (VERSION + frontend/package.json + package-lock.json)"
 fi
 
 echo ">>> git add -A"
